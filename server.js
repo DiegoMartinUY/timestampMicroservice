@@ -38,7 +38,7 @@ app.get("/api/timestamp/:date?", function(req, res) {
             return res.json({ error: "Invalid Date" });
         }
     } else {
-        return res.json({ unix: new Date().getTime(), utc: Date(param).toUTCString() });
+        return res.json({ unix: new Date().getTime(), utc: new Date().toUTCString() });
     }
 });
 
