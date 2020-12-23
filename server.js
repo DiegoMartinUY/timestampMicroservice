@@ -27,16 +27,18 @@ app.get("/api/hello", function(req, res) {
 app.get("/api/timestamp/:date?", function(req, res) {
     let param = req.params.date;
     if (param && typeof param === 'string') {
-        const isArray = param.split('-').length > 1;
         let date = null;
-        if (isArray) {
+        if (!isNaN(Date.parse(param))) {
             date = new Date(param);
-        } else {
-            date = new Date(param * 1000);
+        } else if (isNaN(Date.parse(param))) {
+            if (param.length === 13) {
+                date = new Date(param / 1);
+                return res.json({ unix: date.getTime(), utc: date.toUTCString() });
+            }
+            return res.json({ error: "Invalid Date" });
         }
-        res.json({ unix: date.getTime(), utc: date.toUTCString() });
     } else {
-        res.json({ unix: new Date().getTime(), utc: new Date().toUTCString() });
+        return res.json({ unix: new Date().getTime(), utc: Date(param).toUTCString() });
     }
 });
 
