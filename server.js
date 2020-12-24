@@ -4,6 +4,7 @@
 // init project
 var express = require('express');
 var app = express();
+const timestamp = require('./controllers/timestamp');
 
 // enable CORS (https://en.wikipedia.org/wiki/Cross-origin_resource_sharing)
 // so that your API is remotely testable by FCC 
@@ -25,22 +26,8 @@ app.get("/api/hello", function(req, res) {
 });
 
 app.get("/api/timestamp/:date?", function(req, res) {
-    let param = req.params.date;
-    if (param && typeof param === 'string') {
-        let date = null;
-        if (!isNaN(Date.parse(param))) {
-            date = new Date(param);
-            return res.json({ unix: date.getTime(), utc: date.toUTCString() });
-        } else if (isNaN(Date.parse(param))) {
-            if (param.length === 13) {
-                date = new Date(param / 1);
-                return res.json({ unix: date.getTime(), utc: date.toUTCString() });
-            }
-            return res.json({ error: "Invalid Date" });
-        }
-    } else {
-        return res.json({ unix: new Date().getTime(), utc: new Date().toUTCString() });
-    }
+    const ret = timestamp.getTimestamp(req.params.date);
+    res.json(ret);
 });
 
 
