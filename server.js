@@ -4,7 +4,7 @@
 // init project
 var express = require('express');
 var app = express();
-const timestamp = require('./controllers/timestamp');
+const controller = require('./controllers/controller');
 
 // enable CORS (https://en.wikipedia.org/wiki/Cross-origin_resource_sharing)
 // so that your API is remotely testable by FCC 
@@ -26,7 +26,12 @@ app.get("/api/hello", function(req, res) {
 });
 
 app.get("/api/timestamp/:date?", function(req, res) {
-    const ret = timestamp.getTimestamp(req.params.date);
+    const ret = controller.getTimestamp(req.params.date);
+    res.json(ret);
+});
+
+app.get("/api/whoami", function(req, res) {
+    const ret = controller.getData(req);
     res.json(ret);
 });
 
